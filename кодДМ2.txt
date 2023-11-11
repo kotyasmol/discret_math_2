@@ -1,0 +1,173 @@
+#include <iostream>
+#include <fstream>
+
+const int size = 6; // Размер матрицы
+
+bool isReflexive(int matrix[size][size]) {
+    for (int i = 0; i < size; i++) {
+        if (matrix[i][i] != 1) {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool isAntiReflexive(int matrix[size][size]) {
+    for (int i = 0; i < size; i++) {
+        if (matrix[i][i] == 1) {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool isSymmetric(int matrix[size][size]) {
+    for (int i = 0; i < size; i++) {
+        for (int j = 0; j < size; j++) {
+            if (matrix[i][j] != matrix[j][i]) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+bool isAntiSymmetric(int matrix[size][size]) {
+    for (int i = 0; i < size; i++) {
+        for (int j = 0; j < size; j++) {
+            if (i != j && matrix[i][j] == 1 && matrix[j][i] == 1) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+bool isAsymmetric(int matrix[size][size]) {
+    return isAntiReflexive(matrix) && isAntiSymmetric(matrix);
+}
+
+bool isTransitive(int matrix[size][size]) {
+    for (int i = 0; i < size; i++) {
+        for (int j = 0; j < size; j++) {
+            for (int k = 0; k < size; k++) {
+                if (matrix[i][j] == 1 && matrix[j][k] == 1 && matrix[i][k] != 1) {
+                    return false;
+                }
+            }
+        }
+    }
+    return true;
+}
+
+bool isComplete(int matrix[size][size]) {
+    for (int i = 0; i < size; i++) {
+        for (int j = 0; j < size; j++) {
+            if (matrix[i][j] == 0) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+void inputMatrixFromUser(int matrix[size][size]) {
+    std::cout << "Введите элементы матрицы (6x6):" << std::endl;
+    for (int i = 0; i < size; i++) {
+        for (int j = 0; j < size; j++) {
+            std::cin >> matrix[i][j];
+        }
+    }
+}
+
+void inputMatrixFromFile(int matrix[size][size], const std::string& fileName) {
+    std::ifstream file(fileName);
+    if (file.is_open()) {
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                file >> matrix[i][j];
+            }
+        }
+        file.close();
+    }
+    else {
+        std::cout << "Ошибка при открытии файла." << std::endl;
+    }
+}
+
+int main() {
+    setlocale(0, "");
+    int matrix[size][size];
+
+    std::cout << "Выберите способ ввода матрицы:" << std::endl;
+    std::cout << "1. Ввести вручную" << std::endl;
+    std::cout << "2. Загрузить из файла" << std::endl;
+
+    int choice;
+    std::cin >> choice;
+
+    if (choice == 1) {
+        inputMatrixFromUser(matrix);
+    }
+    else if (choice == 2) {
+        std::string fileName;
+        std::cout << "Введите имя файла: ";
+        std::cin >> fileName;
+        inputMatrixFromFile(matrix, fileName);
+    }
+    else {
+        std::cout << "Неправильный выбор." << std::endl;
+        return 1;
+    }
+
+    if (isReflexive(matrix)) {
+        std::cout << "Рефлексивность: Да" << std::endl;
+    }
+    else {
+        std::cout << "Рефлексивность: Нет" << std::endl;
+    }
+
+    if (isAntiReflexive(matrix)) {
+        std::cout << "Антирефлексивность: Да" << std::endl;
+    }
+    else {
+        std::cout << "Антирефлексивность: Нет" << std::endl;
+    }
+
+    if (isSymmetric(matrix)) {
+        std::cout << "Симметричность: Да" << std::endl;
+    }
+    else {
+        std::cout << "Симметричность: Нет" << std::endl;
+    }
+
+    if (isAntiSymmetric(matrix)) {
+        std::cout << "Антисимметричность: Да" << std::endl;
+    }
+    else {
+        std::cout << "Антисимметричность: Нет" << std::endl;
+    }
+
+    if (isAsymmetric(matrix)) {
+        std::cout << "Асимметричность: Да" << std::endl;
+    }
+    else {
+        std::cout << "Асимметричность: Нет" << std::endl;
+    }
+
+    if (isTransitive(matrix)) {
+        std::cout << "Транзитивность: Да" << std::endl;
+    }
+    else {
+        std::cout << "Транзитивность: Нет" << std::endl;
+    }
+
+    if (isComplete(matrix)) {
+        std::cout << "Полнота: Да" << std::endl;
+    }
+    else {
+        std::cout << "Полнота: Нет" << std::endl;
+    }
+
+    return 0;
+}
